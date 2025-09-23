@@ -1,65 +1,37 @@
 "use client"
-import { Post, User, Comment } from "@/app/interfaces/interfaces"
+import { GetComments } from "@/app/api/comment/comment.api"
+import { GetPost } from "@/app/api/post/post.api"
+import { GetUser } from "@/app/api/user/user.api"
+import { Post, User, IComment } from "@/app/interfaces/interfaces"
 import { useQuery, useQueryClient } from "@tanstack/react-query"
+import Comment from "@/app/components/Comment"
 
 import { use, useState } from "react"
 
 export default function PostPage({ params }: { params: Promise<{ post: string }> }) {
   const { post: postId } = use(params)
   const [comment, setComment] = useState("")
-  const fetchPost = async () => {
-    try {
-      const res = await fetch(`https://jsonplaceholder.typicode.com/posts/${postId}`)
-      const post = await res.json()
-      return post
-    } catch (err: any) {
-      throw new Error(err)
-    }
-  }
-
 
 
   const { data: post, isLoading } = useQuery<Post>({
     queryKey: [`post-${postId}`],
-    queryFn: fetchPost
+    queryFn: () => GetPost(postId)
   })
-
-  const fetchUser = async () => {
-    try {
-      const res = await fetch(`https://jsonplaceholder.typicode.com/users/${post?.userId}`)
-      const user = await res.json()
-      return user
-    } catch (err: any) {
-      throw new Error(err)
-    }
-  }
 
   const { data: user } = useQuery<User>({
     queryKey: [`user-${post?.userId}`],
-    queryFn: fetchUser
+    queryFn: () => GetUser(post?.userId!)
   })
 
-
-  const fetchComments = async () => {
-    try {
-      const res = await fetch(`https://jsonplaceholder.typicode.com/comments?postId=${postId}`)
-      const comments = await res.json()
-      return comments
-    } catch (err: any) {
-      throw new Error(err)
-    }
-  }
-
-
-  const { data: comments } = useQuery<Comment[]>({
+  const { data: comments, isLoading: isLoadingComments } = useQuery<Comment[]>({
     queryKey: [`comments-${postId}`],
-    queryFn: fetchComments
+    queryFn: () => GetComments(Number(postId))
   })
 
   const queryClient = useQueryClient()
   const onCommentSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    queryClient.setQueryData<Comment[]>([`comments-${postId}`], old => {
+    queryClient.setQueryData<IComment[]>([`comments-${postId}`], old => {
       return [{
         body: comment,
         name: "Tu",
@@ -75,7 +47,7 @@ export default function PostPage({ params }: { params: Promise<{ post: string }>
 
   return (
     <main className="py-14 md:py-24 px-8 flex flex-col w-full h-full max-w-5xl">
-      {isLoading && "Obteniendo post..."}
+      {isLoading && <p className="font-bold text-3xl mx-auto">Obteniendo post...</p>}
       {!isLoading && post && (
         <div className="flex flex-col gap-24">
           <div className="border border-2 border-gray-500 p-3">
@@ -92,20 +64,20 @@ export default function PostPage({ params }: { params: Promise<{ post: string }>
               <h3>Añade un comentario</h3>
               <form onSubmit={onCommentSubmit}>
                 <textarea placeholder="Que opinas?" className="border border-gray-200 p-4 w-full outline-none" onChange={(e) => setComment(e.target.value)} value={comment} />
-                <button type="submit" className="bg-black text-white p-2 w-min hover:cursor-pointer hover:bg-black/50">Comentar</button>
+                <button disabled={comment.length <= 0} type="submit" className="bg-black text-white p-2 w-min cursor-pointer hover:bg-black/50 disabled:bg-black">Comentar</button>
               </form>
             </div>
             <ul className="flex flex-col gap-4">
 
-              {comments?.map((comment) => (
-                <li key={comment.id}>
-                  <div>
-                    <p><span className="underline">{comment.email}</span> dijo:</p>
-                  </div>
-                  <p>
-                    "{comment.body}"
+              {isLoadingComments &&
+                <li className="mx-auto">
+                  <p className="text-3xl font-bold">
+                    Obteniendo comentarios...
                   </p>
                 </li>
+              }
+              {!isLoadingComments && comments?.map((comment) => (
+                <Comment comment={comment} />
               ))}
             </ul>
           </div>
