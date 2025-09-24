@@ -1,10 +1,10 @@
 'use client'
 
-import { useQuery, useQueryClient } from "@tanstack/react-query"
-import Link from "next/link";
-import { useEffect, useState } from "react";
+import { useQuery } from "@tanstack/react-query"
+import { useState } from "react";
 import { User } from "../interfaces/interfaces";
 import { GetUsers } from "../api/user/user.api";
+import UserCard from "../components/UserCard";
 "../api/user/user.api";
 
 
@@ -26,10 +26,15 @@ export default function Page() {
       <input placeholder="Buscar" className="p-2 border border-gray-200 focus:outline-none" onChange={(e) => setSearchText(e.target.value)} />
       {isLoading && <p className="text-3xl font-bold mx-auto">Danos un segundo...</p>}
       {!isLoading && (
-        <div>
+        <div className="">
+          {filteredUsers?.length === 0 && (
+            <div className="mt-24">
+              <p>No se encontraron usuarios.</p>
+            </div>
+          )}
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center h-screen gap-4">
             {filteredUsers && filteredUsers.map((user: User) => (
-              
+              <UserCard user={user} />
             ))}
           </ul>
         </div>
