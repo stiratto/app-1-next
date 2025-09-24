@@ -5,7 +5,6 @@ import { useState } from "react";
 import { User } from "../interfaces/interfaces";
 import { GetUsers } from "../api/user/user.api";
 import UserCard from "../components/UserCard";
-"../api/user/user.api";
 
 
 export default function Page() {
