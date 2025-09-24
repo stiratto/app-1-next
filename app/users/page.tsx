@@ -22,7 +22,7 @@ export default function Page() {
   const filteredUsers = users?.filter((u) => u.name.toLowerCase().includes(searchText.toLowerCase()) || u.username.toLowerCase().includes(searchText.toLowerCase()))
 
   return (
-    <main className="w-full flex flex-col items-center justify-center h-full py-8">
+    <main className="w-full flex flex-col items-center justify-center h-full py-8 gap-14">
       <input placeholder="Buscar" className="p-2 border border-gray-200 focus:outline-none" onChange={(e) => setSearchText(e.target.value)} />
       {isLoading && <p className="text-3xl font-bold mx-auto">Danos un segundo...</p>}
       {!isLoading && (
@@ -34,7 +34,7 @@ export default function Page() {
           )}
           <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 items-center h-screen gap-4">
             {filteredUsers && filteredUsers.map((user: User) => (
-              <UserCard user={user} />
+              <UserCard key={user.id} user={user} />
             ))}
           </ul>
         </div>

@@ -35,7 +35,7 @@ export default function Posts() {
               </div>
             )}
             {filteredPosts?.map((post) => (
-              <PostCard post={post} />
+              <PostCard key={post.id} post={post} />
             ))}
           </ul>
         </div>
