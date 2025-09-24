@@ -1,11 +1,13 @@
 # ¿Cómo corro la app?
+Clona el proyecto con `git clone`.
 Después de clonar el proyecto, ingresa al directorio del proyecto:
 
 `cd DIRECTORIO_PROYECTO`
 
-Con tu gestor de paquetes favoritos, instala los paquetes, en mi caso utilizo pnpm.
+Con tu gestor de paquetes favoritos, instala los paquetes, en mi caso utilizo pnpm
 
 `pnpm i`
+Si utilizas npm, usa `npm i`
 
 Para correr el proyecto, haz `pnpm dev` (si usas pnpm), si usas npm: `npm run dev`
 
