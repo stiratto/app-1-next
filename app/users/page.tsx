@@ -22,7 +22,7 @@ export default function Page() {
 
   return (
     <main className="w-full flex flex-col items-center justify-center h-full py-8 gap-14">
-      <input placeholder="Buscar" className="p-2 border border-gray-200 focus:outline-none" onChange={(e) => setSearchText(e.target.value)} />
+      <input placeholder="Buscar" className="p-2 border border-gray-200 focus:outline-none rounded" onChange={(e) => setSearchText(e.target.value)} />
       {isLoading && <p className="text-3xl font-bold mx-auto">Danos un segundo...</p>}
       {!isLoading && (
         <div className="">

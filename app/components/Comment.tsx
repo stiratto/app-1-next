@@ -1,7 +1,7 @@
 'use client'
-import { Comment } from "../interfaces/interfaces";
+import { IComment } from "../interfaces/interfaces";
 
-export default function Comment({ comment }: { comment: Comment }) {
+export default function Comment({ comment }: { comment: IComment }) {
   return (
     <li key={comment.id}>
       <div>
