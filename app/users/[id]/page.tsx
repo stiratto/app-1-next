@@ -6,14 +6,14 @@ import { useQuery, useQueryClient } from "@tanstack/react-query"
 import { useRouter } from "next/navigation"
 import { use, useEffect } from "react"
 
-export default function UserPage({ params }: { params: Promise<{ id: string }> }) {
+export default function UserPage({ params }: { params: Promise<{ id: number }> }) {
   const { push } = useRouter()
   const { id } = use(params)
 
 
   const { data, isLoading } = useQuery<User>({
     queryKey: [`user-${id}`],
-    queryFn: () => GetUser(Number(id))
+    queryFn: () => GetUser(id),
   })
 
   return (

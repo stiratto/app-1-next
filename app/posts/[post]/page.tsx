@@ -23,7 +23,7 @@ export default function PostPage({ params }: { params: Promise<{ post: string }>
     queryFn: () => GetUser(post?.userId!)
   })
 
-  const { data: comments, isLoading: isLoadingComments } = useQuery<Comment[]>({
+  const { data: comments, isLoading: isLoadingComments } = useQuery<IComment[]>({
     queryKey: [`comments-${postId}`],
     queryFn: () => GetComments(Number(postId))
   })
@@ -77,7 +77,7 @@ export default function PostPage({ params }: { params: Promise<{ post: string }>
                 </li>
               }
               {!isLoadingComments && comments?.map((comment) => (
-                <Comment comment={comment} />
+                <Comment comment={comment} key={comment.id} />
               ))}
             </ul>
           </div>

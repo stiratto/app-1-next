@@ -1,6 +1,8 @@
-export async function GetPosts() {
+import { Post } from "@/app/interfaces/interfaces"
+
+export async function GetPosts(page: number): Promise<Post[]> {
   try {
-    const res = await fetch("https://jsonplaceholder.typicode.com/posts")
+    const res = await fetch(`https://jsonplaceholder.typicode.com/posts?_page=${page}`)
     const data = await res.json()
     return data
   } catch (err: any) {
